@@ -137,7 +137,7 @@
         strcpy(catalogoRes[16].palabra, "return");
         
         // Con busqueda lineal revisamos si la palabra coincide con la palabra reservada
-        for (int i = 0; i < 17; i++) {
+        for (int i = 0; i < 17; i++) { //EN CASO DE QUE EXISTA LA PALABRA RESERVADA Y LA COMPARAMOS CON PAL, ENTONCES VAMOS A RETORNAR EL VALOR DEL CATALOGO DE ARRIBA.
             if (strcmp(pal, catalogoRes[i].palabra) == 0) {
                 // Si coincide regresamos el valor en la tabla de palabras reservadas
                 return catalogoRes[i].valor;
