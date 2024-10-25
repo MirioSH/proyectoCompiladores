@@ -2233,8 +2233,10 @@ void yyfree (void * ptr )
 
 
 int main(int argc, char** argv) {
-    printf("\n<--> BIENVENIDO AL PROGRAMA ANALIZADOR LÉXICO <-->\n\n");
-    printf("A continuación, se analizará el archivo introducido al arrancar el programa\n");
+    printf("\n==== ANALIZADOR LÉXICO INICIADO ====\n\n");
+    printf("El programa procesará el archivo proporcionado y generará los tokens correspondientes.\n");
+    printf("Iniciando el análisis léxico...\n");
+
     system("pause");
 
     if (argc != 2) {

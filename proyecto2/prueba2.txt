@@ -1,0 +1,16 @@
+
+int $main(int $numero){
+    int $numero;
+    float $pi;
+    int $resultado;
+    
+    $numero = 42;
+    $pi = 3.14;
+    $resultado = $numero * $pi + 10;
+    
+    if ($resultado > 50) 
+        return (1);
+    else
+        return (0);
+    :
+}
