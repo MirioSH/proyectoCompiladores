@@ -1,9 +1,16 @@
-%{
-    // Elaborado por:
-    // Barragán Pilar Diana
-    // Ramírez Martínez Valeria
-    // Silverio Martínez Andrés
-    
+%{  
+    /* 
+    * OBJETIVO: Este programa es un analizador léxico que procesa un archivo fuente, identifica
+    *           palabras reservadas, operadores, identificadores, literales, y genera una
+    *           representación en forma de tokens, además de detectar errores léxicos.
+    * INTEGRANTES:
+    * - Soto Huerta Gustavo Isaac
+    * - Peña Rodríguez Eduardo
+    * - Guerrero Gutiérrez Héctor
+    * FECHA: 2024
+    */
+
+
     #include<stdio.h> // Librerias a utilizar a lo largo del código
     #include<stdlib.h>
     #include<string.h>
