@@ -1,8 +1,7 @@
 %{  
     /* 
-    * OBJETIVO: Este programa es un analizador léxico que procesa un archivo fuente, identifica
-    *           palabras reservadas, operadores, identificadores, literales, y genera una
-    *           representación en forma de tokens, además de detectar errores léxicos.
+    * OBJETIVO: Construir un analizador Sintáctico Descendente Recursivo    
+    *
     * INTEGRANTES:
     * - Soto Huerta Gustavo Isaac
     * - Peña Rodríguez Eduardo
