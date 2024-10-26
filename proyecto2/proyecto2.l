@@ -239,45 +239,22 @@
         return -1;  // No encontrado
     }
 
+
+    // asignar átomos de palabras reservadas según la tabla del PDF
 char asignarAtomoPalRes(char *palabra) {
-    if (strcmp(palabra, "case") == 0) {
-        return 'a';
-    } else if (strcmp(palabra, "long") == 0) {
-        return 'b';
-    } else if (strcmp(palabra, "if") == 0) {
-        return 'f';
-    } else if (strcmp(palabra, "else") == 0) {
-        return 't';
-    } else if (strcmp(palabra, "double") == 0) {
-        return 'g';
-    } else if (strcmp(palabra, "while") == 0) {
-        return 'w';
-    } else if (strcmp(palabra, "do") == 0) {
-        return 'm';
-    } else if (strcmp(palabra, "int") == 0) {
-        return '#';
-    } else if (strcmp(palabra, "default") == 0) {
-        return 'o';
-    } else if (strcmp(palabra, "float") == 0) {
-        return 'x';
-    } else if (strcmp(palabra, "for") == 0) {
-        return 'j';
-    } else if (strcmp(palabra, "switch") == 0) {
-        return 'h';
-    } else if (strcmp(palabra, "short") == 0) {
-        return 'p';
-    } else if (strcmp(palabra, "continue") == 0) {
-        return 'c';
-    } else if (strcmp(palabra, "break") == 0) {
-        return 'q';
-    } else if (strcmp(palabra, "char") == 0) {
-        return 'y';
-    } else if (strcmp(palabra, "return") == 0) {
-        return 'z';
-    } else {
-        return 'N'; // Valor por defecto si no se encuentra la palabra
-    }
-} // Agregar este corchete para cerrar la función
+    if (strcmp(palabra, "cadena") == 0) return 'h';
+    if (strcmp(palabra, "caracter") == 0) return 'g';
+    if (strcmp(palabra, "else") == 0) return 'e';
+    if (strcmp(palabra, "entero") == 0) return 'n';
+    if (strcmp(palabra, "for") == 0) return 'f';
+    if (strcmp(palabra, "if") == 0) return 'i';
+    if (strcmp(palabra, "real") == 0) return 'd';
+    if (strcmp(palabra, "return") == 0) return 'b';
+    if (strcmp(palabra, "void") == 0) return 'v';
+    if (strcmp(palabra, "while") == 0) return 'w';
+    return 'N'; // No encontrado
+}
+
 
 char asignarAtomoSimEspe(const char* palabra){
     if (strcmp(palabra, "[") == 0) {
