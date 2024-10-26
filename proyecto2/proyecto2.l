@@ -1,328 +1,321 @@
-%{  
-    /* 
-    * OBJETIVO: Construir un analizador Sintáctico Descendente Recursivo    
-    *
-    * INTEGRANTES:
-    * - Soto Huerta Gustavo Isaac
-    * - Peña Rodríguez Eduardo
-    * - Guerrero Gutiérrez Héctor
-    * FECHA: 2024
-    */
+    %{  
+        /* 
+        * OBJETIVO: Construir un analizador Sintáctico Descendente Recursivo    
+        *
+        * INTEGRANTES:
+        * - Soto Huerta Gustavo Isaac
+        * - Peña Rodríguez Eduardo
+        * - Guerrero Gutiérrez Héctor
+        * FECHA: 2024
+        */
 
 
-    #include<stdio.h> // Librerias a utilizar a lo largo del código
-    #include<stdlib.h>
-    #include<string.h>
-    #include<stdbool.h>
+        #include<stdio.h> // Librerias a utilizar a lo largo del código
+        #include<stdlib.h>
+        #include<string.h>
+        #include<stdbool.h>
 
-    // FUNCIONES GLOBALES
-    char cadenaAtomos[99999] = ""; // <-- Cadena encargada de guardar los átmos
-    char asignarAtomoSimEspe(const char* yytext);
-    char asignarAtomoOpArit(const char* yytext);
-    char *asignarAtomoOpRel(const char* yytext);
+        // FUNCIONES GLOBALES
+        char cadenaAtomos[99999] = ""; // <-- Cadena encargada de guardar los átmos
+        char asignarAtomoSimEspe(const char* yytext);
+        char asignarAtomoOpArit(const char* yytext);
+        char *asignarAtomoOpRel(const char* yytext);
 
-    void Program();
-    void otraFunc();
-    void Func();
-    void Tipo();
-    void Param();
-    void otroParam();
-    void Cuerpo();
-    void Decl();
-    void D();
-    void K();
-    void Q();
-    void N();
-    void C();
-    void listaP();
-    void P();
-    void A();
-    void AP();
-    void E();
-    void EP();
-    void T();
-    void F();
-    void Llama();
-    void arg();
-    void otroArg();
-    void V();
-    void TP();
-    void I();
-    void R();
-    void RP();
-    void IP();
-    void H();
-    void CP();
-    void U();
-    void OP();
-    void W();
-    void J();
-    void Y();
-    void X();
-    void Z();
-    void Devuelve();
+        void Program();
+        void otraFunc();
+        void Func();
+        void Tipo();
+        void Param();
+        void otroParam();
+        void Cuerpo();
+        void Decl();
+        void D();
+        void K();
+        void Q();
+        void N();
+        void C();
+        void listaP();
+        void P();
+        void A();
+        void AP();
+        void E();
+        void EP();
+        void T();
+        void F();
+        void Llama();
+        void arg();
+        void otroArg();
+        void V();
+        void TP();
+        void I();
+        void R();
+        void RP();
+        void IP();
+        void H();
+        void CP();
+        void U();
+        void OP();
+        void W();
+        void J();
+        void Y();
+        void X();
+        void Z();
+        void Devuelve();
 
 
 
-    char next_atomo;
-    int n=0;
+        char next_atomo;
+        int n=0;
 
-    typedef struct { // Se define la estructura del catalogo de palabras reservadas
-        int valor; // Valor del catalogo
-        char palabra[100]; //palabra
-    } PalRes;
+        typedef struct { // Se define la estructura del catalogo de palabras reservadas
+            int valor; // Valor del catalogo
+            char palabra[100]; //palabra
+        } PalRes;
 
-    typedef struct { // Se define la estructura del catalogo de operadores
-        int valor; // Valor del catalogo
-        char op[100]; //Operador en la tabla
-    } Operadores;
+        typedef struct { // Se define la estructura del catalogo de operadores
+            int valor; // Valor del catalogo
+            char op[100]; //Operador en la tabla
+        } Operadores;
 
-    // Estructura del arreglo de simbolos
-    typedef struct { // Se define la estructura de la tabla de simbolos
-        int posicion; // Posición del simbolo
-        char nombre[100]; // Nombre del simbolo, con longitud máxima de 100
-        int tipo; // Tipo de dato del simbolo
-    } TablaSimbolos;
+        // Estructura del arreglo de simbolos
+        typedef struct { // Se define la estructura de la tabla de simbolos
+            int posicion; // Posición del simbolo
+            char nombre[100]; // Nombre del simbolo, con longitud máxima de 100
+            int tipo; // Tipo de dato del simbolo
+        } TablaSimbolos;
 
-    // Estructura para el arreglo de literales
-    typedef struct { // Se define la estructura de la tabla de literales
-        int posicion; // Posición que tendrá el dato cadena o literal 
-        char dato[100]; // Longitud del valor dato, maximo 100
-    } TablaLiterales;
+        // Estructura para el arreglo de literales
+        typedef struct { // Se define la estructura de la tabla de literales
+            int posicion; // Posición que tendrá el dato cadena o literal 
+            char dato[100]; // Longitud del valor dato, maximo 100
+        } TablaLiterales;
 
-    // Estructura para la información de un token
-    typedef struct { // Se define la estructura del Token
-        int clase; // Clase entera que es el simbolo
-        char valor[100]; // Longitud del valor del token, maximo 100
-        char info[100]; // Cadena que tiene guardada cada token
-        char atomo; // RESPONSABLE DE GUARDAR EL ATOMO DE CADA UNO DE LAS CLASES UNA VEZ IDENTIFICADOS
-    } TokenInfo;
+        // Estructura para la información de un token
+        typedef struct { // Se define la estructura del Token
+            int clase; // Clase entera que es el simbolo
+            char valor[100]; // Longitud del valor del token, maximo 100
+            char info[100]; // Cadena que tiene guardada cada token
+            char atomo; // RESPONSABLE DE GUARDAR EL ATOMO DE CADA UNO DE LAS CLASES UNA VEZ IDENTIFICADOS
+        } TokenInfo;
 
-    // Creacion de arreglos
-    TablaSimbolos tablaSimbolos[99999]; // Se crea el arreglo "tablaSimbolos"
-    TablaLiterales tablaLiteralesCadenas[99999]; // Se crea el arreglo "tablaLitCad"
-    TablaLiterales tablaLiteralesNumericas[99999]; // Se crea el arreglo "tablaLitNum"
-    TokenInfo tokens[99999]; // Se crea el arreglo "tokens"
-    PalRes catalogoRes[17]; // Se crea el catalogo de palabras reservadas
-    Operadores catalogoOp[7]; // Se crea el catalogo de operadores
+        // Creacion de arreglos
+        TablaSimbolos tablaSimbolos[99999]; // Se crea el arreglo "tablaSimbolos"
+        TablaLiterales tablaLiteralesCadenas[99999]; // Se crea el arreglo "tablaLitCad"
+        TablaLiterales tablaLiteralesNumericas[99999]; // Se crea el arreglo "tablaLitNum"
+        TokenInfo tokens[99999]; // Se crea el arreglo "tokens"
+        PalRes catalogoRes[17]; // Se crea el catalogo de palabras reservadas
+        Operadores catalogoOp[7]; // Se crea el catalogo de operadores
 
-    // Se crean variables para las funciones de busqueda
-    int numSimbolos, numLitCad, numLitNum, numTokens;
+        // Se crean variables para las funciones de busqueda
+        int numSimbolos, numLitCad, numLitNum, numTokens;
 
-    // Funcion para obtener el valor en el catalogo de palabras reservadas
-    int Palabras_res(char* pal)
-    {
-        // Asignamos el valor con un ciclo for
-        for (int i = 0; i < 17; i++) {
-            catalogoRes[i].valor = i;
+        // Funcion para obtener el valor en el catalogo de palabras reservadas
+        int Palabras_res(char* pal)
+        {
+            // Asignamos el valor con un ciclo for
+            for (int i = 0; i < 17; i++) {
+                catalogoRes[i].valor = i;
+                }
+            
+            // Agregamos las palabras reservadas al catalogo
+            strcpy(catalogoRes[0].palabra, "case");
+            strcpy(catalogoRes[1].palabra, "long");
+            strcpy(catalogoRes[2].palabra, "if");
+            strcpy(catalogoRes[3].palabra, "else");
+            strcpy(catalogoRes[4].palabra, "double");
+            strcpy(catalogoRes[5].palabra, "while");
+            strcpy(catalogoRes[6].palabra, "do");
+            strcpy(catalogoRes[7].palabra, "int");
+            strcpy(catalogoRes[8].palabra, "default");
+            strcpy(catalogoRes[9].palabra, "float");
+            strcpy(catalogoRes[10].palabra, "for");
+            strcpy(catalogoRes[11].palabra, "switch");
+            strcpy(catalogoRes[12].palabra, "short");
+            strcpy(catalogoRes[13].palabra, "continue");
+            strcpy(catalogoRes[14].palabra, "break");
+            strcpy(catalogoRes[15].palabra, "char");
+            strcpy(catalogoRes[16].palabra, "return");
+            
+            // Con busqueda lineal revisamos si la palabra coincide con la palabra reservada
+            for (int i = 0; i < 17; i++) { //EN CASO DE QUE EXISTA LA PALABRA RESERVADA Y LA COMPARAMOS CON PAL, ENTONCES VAMOS A RETORNAR EL VALOR DEL CATALOGO DE ARRIBA.
+                if (strcmp(pal, catalogoRes[i].palabra) == 0) {
+                    // Si coincide regresamos el valor en la tabla de palabras reservadas
+                    return catalogoRes[i].valor;
+                    }
+                }
+            // Si no encontramos la palabra
+            return -1;
+        }
+        
+        // Funcion para obtener el valor en el catalogo de operadores
+        int Operadores_rel(char* Op)
+        {
+            // Asignamos el valor con un ciclo for
+            for (int i = 0; i < 7; i++) {
+                catalogoOp[i].valor=i;
             }
-        
-        // Agregamos las palabras reservadas al catalogo
-        strcpy(catalogoRes[0].palabra, "case");
-        strcpy(catalogoRes[1].palabra, "long");
-        strcpy(catalogoRes[2].palabra, "if");
-        strcpy(catalogoRes[3].palabra, "else");
-        strcpy(catalogoRes[4].palabra, "double");
-        strcpy(catalogoRes[5].palabra, "while");
-        strcpy(catalogoRes[6].palabra, "do");
-        strcpy(catalogoRes[7].palabra, "int");
-        strcpy(catalogoRes[8].palabra, "default");
-        strcpy(catalogoRes[9].palabra, "float");
-        strcpy(catalogoRes[10].palabra, "for");
-        strcpy(catalogoRes[11].palabra, "switch");
-        strcpy(catalogoRes[12].palabra, "short");
-        strcpy(catalogoRes[13].palabra, "continue");
-        strcpy(catalogoRes[14].palabra, "break");
-        strcpy(catalogoRes[15].palabra, "char");
-        strcpy(catalogoRes[16].palabra, "return");
-        
-        // Con busqueda lineal revisamos si la palabra coincide con la palabra reservada
-        for (int i = 0; i < 17; i++) { //EN CASO DE QUE EXISTA LA PALABRA RESERVADA Y LA COMPARAMOS CON PAL, ENTONCES VAMOS A RETORNAR EL VALOR DEL CATALOGO DE ARRIBA.
-            if (strcmp(pal, catalogoRes[i].palabra) == 0) {
-                // Si coincide regresamos el valor en la tabla de palabras reservadas
-                return catalogoRes[i].valor;
+            
+            // Agregamos los operadores al catalogo
+            strcpy(catalogoOp[0].op,"<");
+            strcpy(catalogoOp[1].op,">");
+            strcpy(catalogoOp[2].op,"<=");
+            strcpy(catalogoOp[3].op,">=");
+            strcpy(catalogoOp[4].op,"==");
+            strcpy(catalogoOp[5].op,"!=");
+
+            // Con busqueda lineal revisamos si el op coincide con el operador
+            for (int i = 0; i < 32; i++) {
+                if (strcmp(Op, catalogoOp[i].op) == 0) {
+                    // Si coincide regresamos el valor en la tabla de operadores
+                    return catalogoOp[i].valor;
                 }
             }
-        // Si no encontramos la palabra
-        return -1;
-    }
-    
-    // Funcion para obtener el valor en el catalogo de operadores
-    int Operadores_rel(char* Op)
-    {
-        // Asignamos el valor con un ciclo for
-        for (int i = 0; i < 7; i++) {
-            catalogoOp[i].valor=i;
+            
+            // Si no encontramos el operador
+            return -1;
         }
-        
-        // Agregamos los operadores al catalogo
-        strcpy(catalogoOp[0].op,"<");
-        strcpy(catalogoOp[1].op,">");
-        strcpy(catalogoOp[2].op,"<=");
-        strcpy(catalogoOp[3].op,">=");
-        strcpy(catalogoOp[4].op,"==");
-        strcpy(catalogoOp[5].op,"!=");
 
-        // Con busqueda lineal revisamos si el op coincide con el operador
-        for (int i = 0; i < 32; i++) {
-            if (strcmp(Op, catalogoOp[i].op) == 0) {
-                // Si coincide regresamos el valor en la tabla de operadores
-                return catalogoOp[i].valor;
+        // Funcion para busqueda lineal de la posicion en la tabla de simbolos
+        int posTabSimb(char* nombre) {
+            for (int i = 0; i < numSimbolos; i++) {
+                // Si encontramos una coincidencia devolvemos la posicion
+                if (strcmp(tablaSimbolos[i].nombre, nombre) == 0) {
+                    return tablaSimbolos[i].posicion;
+                }
             }
+            return -1;  
         }
-        
-        // Si no encontramos el operador
-        return -1;
-    }
 
-    // Funcion para busqueda lineal de la posicion en la tabla de simbolos
-    int posTabSimb(char* nombre) {
-        for (int i = 0; i < numSimbolos; i++) {
-            // Si encontramos una coincidencia devolvemos la posicion
-            if (strcmp(tablaSimbolos[i].nombre, nombre) == 0) {
-                return tablaSimbolos[i].posicion;
+
+        // Funcion para busqueda linela de la posicion en la tabla de literales de cadena
+        int posTabLitCads(char* dato) {
+            for (int i = 0; i < numLitCad; i++) {
+                // Si encontramos una coincidencia devolvemos la posicion
+                if (strcmp(tablaLiteralesCadenas[i].dato, dato) == 0) {
+                    return tablaLiteralesCadenas[i].posicion;
+                }
             }
+            return -1; 
         }
-        return -1;  
-    }
 
-
-    // Funcion para busqueda linela de la posicion en la tabla de literales de cadena
-    int posTabLitCads(char* dato) {
-        for (int i = 0; i < numLitCad; i++) {
-            // Si encontramos una coincidencia devolvemos la posicion
-            if (strcmp(tablaLiteralesCadenas[i].dato, dato) == 0) {
-                return tablaLiteralesCadenas[i].posicion;
+        // Funcion para busqueda lineal de la posicion en la tabla de literales numericas
+        int posTabLitNum(char* dato) {
+            for (int i = 0; i < numLitNum; i++) {
+                // Si encontramos una coincidencia devolvemos la posicion
+                if (strcmp(tablaLiteralesNumericas[i].dato, dato) == 0) {
+                    return tablaLiteralesNumericas[i].posicion;
+                }
             }
+            return -1;  // No encontrado
         }
-        return -1; 
-    }
 
-    // Funcion para busqueda lineal de la posicion en la tabla de literales numericas
-    int posTabLitNum(char* dato) {
-        for (int i = 0; i < numLitNum; i++) {
-            // Si encontramos una coincidencia devolvemos la posicion
-            if (strcmp(tablaLiteralesNumericas[i].dato, dato) == 0) {
-                return tablaLiteralesNumericas[i].posicion;
+        // Función que busca un id en el arreglo de simbolos
+        int buscaTabSimb(char* nombre) {
+            for (int i = 0; i < numSimbolos; i++) {
+                if (strcmp(tablaSimbolos[i].nombre, nombre) == 0) {
+                    return i;
+                }
             }
+            return -1;  
         }
-        return -1;  // No encontrado
-    }
 
-    // Función que busca un id en el arreglo de simbolos
-    int buscaTabSimb(char* nombre) {
-        for (int i = 0; i < numSimbolos; i++) {
-            if (strcmp(tablaSimbolos[i].nombre, nombre) == 0) {
-                return i;
+        // Función que busca un id en el arreglo de literales cadena
+        int buscaTabLitCads(char* dato) {
+            for (int i = 0; i < numLitCad; i++) {
+                if (strcmp(tablaLiteralesCadenas[i].dato, dato) == 0) {
+                    return i;
+                }
             }
+            return -1; 
         }
-        return -1;  
-    }
 
-    // Función que busca un id en el arreglo de literales cadena
-    int buscaTabLitCads(char* dato) {
-        for (int i = 0; i < numLitCad; i++) {
-            if (strcmp(tablaLiteralesCadenas[i].dato, dato) == 0) {
-                return i;
+        // Función que busca un id en el arreglo de literales numericas
+        int buscaTabLitNum(char* dato) {
+            for (int i = 0; i < numLitNum; i++) {
+                if (strcmp(tablaLiteralesNumericas[i].dato, dato) == 0) {
+                    return i;
+                }
             }
+            return -1;  // No encontrado
         }
-        return -1; 
+
+
+        // asignar átomos de palabras reservadas según la tabla del PDF
+    char asignarAtomoPalRes(char *palabra) {
+        if (strcmp(palabra, "cadena") == 0) return 'h';
+        if (strcmp(palabra, "caracter") == 0) return 'g';
+        if (strcmp(palabra, "else") == 0) return 'e';
+        if (strcmp(palabra, "entero") == 0) return 'n';
+        if (strcmp(palabra, "for") == 0) return 'f';
+        if (strcmp(palabra, "if") == 0) return 'i';
+        if (strcmp(palabra, "real") == 0) return 'd';
+        if (strcmp(palabra, "return") == 0) return 'b';
+        if (strcmp(palabra, "void") == 0) return 'v';
+        if (strcmp(palabra, "while") == 0) return 'w';
+        return 'N'; // No encontrado
     }
 
-    // Función que busca un id en el arreglo de literales numericas
-    int buscaTabLitNum(char* dato) {
-        for (int i = 0; i < numLitNum; i++) {
-            if (strcmp(tablaLiteralesNumericas[i].dato, dato) == 0) {
-                return i;
-            }
+
+    char asignarAtomoSimEspe(const char* palabra){
+        if (strcmp(palabra, "[") == 0) {
+            return '[';
+        } else if (strcmp(palabra, "]") == 0) {
+            return ']';
+        } else if (strcmp(palabra, "(") == 0) {
+            return '(';
+        } else if (strcmp(palabra, ")") == 0) {
+            return ')';
+        } else if (strcmp(palabra, "{") == 0) {
+            return '{';
+        } else if (strcmp(palabra, "}") == 0) {
+            return '}';
+        }else if (strcmp(palabra, ",") == 0) {
+            return ',';
+        } else if (strcmp(palabra, ":") == 0) {
+            return ':';
+        } else if (strcmp(palabra, ";") == 0) {
+            return ';';
+        } else {
+            return 'N'; // Valor por defecto si no se encuentra la palabra
         }
-        return -1;  // No encontrado
     }
 
 
-    // asignar átomos de palabras reservadas según la tabla del PDF
-char asignarAtomoPalRes(char *palabra) {
-    if (strcmp(palabra, "cadena") == 0) return 'h';
-    if (strcmp(palabra, "caracter") == 0) return 'g';
-    if (strcmp(palabra, "else") == 0) return 'e';
-    if (strcmp(palabra, "entero") == 0) return 'n';
-    if (strcmp(palabra, "for") == 0) return 'f';
-    if (strcmp(palabra, "if") == 0) return 'i';
-    if (strcmp(palabra, "real") == 0) return 'd';
-    if (strcmp(palabra, "return") == 0) return 'b';
-    if (strcmp(palabra, "void") == 0) return 'v';
-    if (strcmp(palabra, "while") == 0) return 'w';
-    return 'N'; // No encontrado
-}
-
-
-char asignarAtomoSimEspe(const char* palabra){
-    if (strcmp(palabra, "[") == 0) {
-        return '[';
-    } else if (strcmp(palabra, "]") == 0) {
-        return ']';
-    } else if (strcmp(palabra, "(") == 0) {
-        return '(';
-    } else if (strcmp(palabra, ")") == 0) {
-        return ')';
-    } else if (strcmp(palabra, "{") == 0) {
-        return '{';
-    } else if (strcmp(palabra, "}") == 0) {
-        return '}';
-    }else if (strcmp(palabra, ",") == 0) {
-        return ',';
-    } else if (strcmp(palabra, ":") == 0) {
-        return ':';
-    } else if (strcmp(palabra, ";") == 0) {
-        return ';';
-    } else {
-        return 'N'; // Valor por defecto si no se encuentra la palabra
-    }
-}
-
-
-char asignarAtomoOpArit(const char* palabra) {
-    if (strcmp(palabra, "+") == 0) {
-        return '+';
-    } else if (strcmp(palabra, "-") == 0) {
-        return '-';
-    } else if (strcmp(palabra, "*") == 0) {
-        return '*';
-    } else if (strcmp(palabra, "/") == 0) {
-        return '/';
-    } else if (strcmp(palabra, "%") == 0) { 
-        return '%';
-    } else if (strcmp(palabra, "\\") == 0) { // Verifica la barra invertida correctamente
-        return '\\';
-    } else if (strcmp(palabra, "^") == 0) {
-        return '^';
-    } else {
-        return 'N'; // Valor por defecto si no se encuentra la palabra
-    }
-}
-
-
-char *asignarAtomoOpRel(const char* palabra) {
-    if (strcmp(palabra, "<") == 0) {
-        return "<";
-    } else if (strcmp(palabra, ">") == 0) {
-        return ">";
-    } else if (strcmp(palabra, "<=") == 0) {
-        return "<=";
-    } else if (strcmp(palabra, ">=") == 0) {
-        return ">=";
-    } else if (strcmp(palabra, "==") == 0) {
-        return "==";
-    } else if (strcmp(palabra, "!=") == 0) {
-        return "!=";
-    } else {
-        return "na"; // Valor por defecto si no se encuentra la palabra
+    char asignarAtomoOpArit(const char* palabra) {
+        if (strcmp(palabra, "+") == 0) {
+            return '+';
+        } else if (strcmp(palabra, "-") == 0) {
+            return '-';
+        } else if (strcmp(palabra, "*") == 0) {
+            return '*';
+        } else if (strcmp(palabra, "/") == 0) {
+            return '/';
+        } else if (strcmp(palabra, "%") == 0) { 
+            return '%';
+        } else if (strcmp(palabra, "\\") == 0) { // Verifica la barra invertida correctamente
+            return '\\';
+        } else if (strcmp(palabra, "^") == 0) {
+            return '^';
+        } else {
+            return 'N'; // Valor por defecto si no se encuentra la palabra
+        }
     }
 
-}
-// AQUI SE DEFINIRAN LAS EXPRESIONES REGULARES PARA LOS COMPONENTES LEXICOS
+    //Operadores relacionales según los valores de la tabla
+    char asignarAtomoOpRel(const char* op) {
+        if (strcmp(op, ">") == 0) return '>';
+        if (strcmp(op, "<") == 0) return '<';
+        if (strcmp(op, "==") == 0) return '?';
+        if (strcmp(op, ">=") == 0) return 'y';
+        if (strcmp(op, "<=") == 0) return 'l';
+        if (strcmp(op, "<>") == 0) return '¿';
+        return 'N'; // No encontrado
+    }
 
-%}
+
+        // AQUI SE DEFINIRAN LAS EXPRESIONES REGULARES PARA LOS COMPONENTES LEXICOS
+
+    %}
 
 %option noyywrap
 
