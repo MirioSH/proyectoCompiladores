@@ -178,7 +178,32 @@
 
 	// Funcion para obtener el valor en el catalogo de OPERADORES DE ASIGNACIÓN
 
-	
+	int Operadores_rel(char* Op)
+        {
+            // Asignamos el valor con un ciclo for
+            for (int i = 6; i < 13; i++) {
+                catalogoOp[i].valor=i;
+            }
+            
+            // Agregamos los operadores al catalogo
+            strcpy(catalogoOp[7].op, "~");
+  	    strcpy(catalogoOp[8].op, "+~");
+ 	    strcpy(catalogoOp[9].op, "-~");
+ 	    strcpy(catalogoOp[10].op, "*~");
+	    strcpy(catalogoOp[11].op, "/~");
+ 	    strcpy(catalogoOp[12].op, "$~");
+
+	    // Con busqueda lineal revisamos si el op coincide con el operador
+            for (int i = 0; i < 32; i++) {
+                if (strcmp(Op, catalogoOp[i].op) == 0) {
+                    // Si coincide regresamos el valor en la tabla de operadores
+                    return catalogoOp[i].valor;
+                }
+            }
+            
+            // Si no encontramos el operador
+            return -1;
+        }
 
 
 
