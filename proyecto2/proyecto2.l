@@ -241,6 +241,7 @@
 
 
         // asignar átomos de palabras reservadas según la tabla del PDF
+	// REVISAR SI LAS PALABRAS RESERVADAS LAS METEMOS DIRECTO EN ESTA PARTE
     char asignarAtomoPalRes(char *palabra) {
         if (strcmp(palabra, "cadena") == 0) return 'h';
         if (strcmp(palabra, "caracter") == 0) return 'g';
