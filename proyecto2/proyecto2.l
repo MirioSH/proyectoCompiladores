@@ -147,7 +147,7 @@
             return -1;
         }
         
-        // Funcion para obtener el valor en el catalogo de operadores
+        // Funcion para obtener el valor en el catalogo de OPERADORES RELACIONALES
         int Operadores_rel(char* Op)
         {
             // Asignamos el valor con un ciclo for
@@ -156,12 +156,13 @@
             }
             
             // Agregamos los operadores al catalogo
-            strcpy(catalogoOp[0].op,"<");
-            strcpy(catalogoOp[1].op,">");
-            strcpy(catalogoOp[2].op,"<=");
-            strcpy(catalogoOp[3].op,">=");
-            strcpy(catalogoOp[4].op,"==");
-            strcpy(catalogoOp[5].op,"!=");
+            strcpy(catalogoOp[0].op, "^^");
+  	    strcpy(catalogoOp[1].op, "^\"");
+ 	    strcpy(catalogoOp[2].op, "==");
+ 	    strcpy(catalogoOp[3].op, "^^=");
+	    strcpy(catalogoOp[4].op, "^\"=");
+ 	    strcpy(catalogoOp[5].op, "<>");
+  	    strcpy(catalogoOp[6].op, "!=");
 
             // Con busqueda lineal revisamos si el op coincide con el operador
             for (int i = 0; i < 32; i++) {
@@ -174,6 +175,14 @@
             // Si no encontramos el operador
             return -1;
         }
+
+	// Funcion para obtener el valor en el catalogo de OPERADORES DE ASIGNACIÓN
+
+	
+
+
+
+	//Funcion para obetenr el catalogo de 
 
         // Funcion para busqueda lineal de la posicion en la tabla de simbolos
         int posTabSimb(char* nombre) {
