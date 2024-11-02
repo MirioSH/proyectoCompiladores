@@ -538,6 +538,11 @@ $[a-zA-Z]+           { printf("[Clase 1] Identificador: %s\n", yytext);
                               numTokens++;
                             }
 
+//COLORCAR AQUI LA CLASE PARA OPERADORES DE ASIGNACION
+
+
+
+
 
 "="                 { printf("[Clase 8] Operador de asignacion: %s\n", yytext);
                     // Almacena la información del token
