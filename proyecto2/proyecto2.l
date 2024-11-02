@@ -327,12 +327,8 @@
             return '*';
         } else if (strcmp(palabra, "/") == 0) {
             return '/';
-        } else if (strcmp(palabra, "%") == 0) { 
-            return '%';
-        } else if (strcmp(palabra, "\\") == 0) { // Verifica la barra invertida correctamente
-            return '\\';
-        } else if (strcmp(palabra, "^") == 0) {
-            return '^';
+        } else if (strcmp(palabra, "$") == 0) { 
+            return '$';
         } else {
             return 'N'; // Valor por defecto si no se encuentra la palabra
         }
