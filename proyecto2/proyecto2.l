@@ -313,8 +313,19 @@
         return 'N'; // No encontrado
     }
 
+    // REVISAR AL CREACION DE LA TABLA DE OP.ASIGNACION
+    char asignarAtomoOpAsig(const char* op) {
+        if (strcmp(op, "~") == 0) return '=';
+        if (strcmp(op, "+~") == 0) return 'm';
+        if (strcmp(op, "-~") == 0) return 'k';
+        if (strcmp(op, "*~") == 0) return 'p';
+        if (strcmp(op, "/~") == 0) return 't';
+        if (strcmp(op, "$~") == 0) return 'u';
+        return 'N'; // No encontrado
+    }
 
-        // AQUI SE DEFINIRAN LAS EXPRESIONES REGULARES PARA LOS COMPONENTES LEXICOS
+
+    // AQUI SE DEFINIRAN LAS EXPRESIONES REGULARES PARA LOS COMPONENTES LEXICOS
 
     %}
 
