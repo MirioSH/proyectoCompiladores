@@ -300,7 +300,9 @@
             return '(';
         } else if (strcmp(palabra, "{") == 0) {
             return '{';
-        } else if (strcmp(palabra, "[") == 0) {
+        } else if (strcmp(palabra, "}") == 0) {
+            return '}';
+        }  else if (strcmp(palabra, "[") == 0) {
             return '[';
         } else if (strcmp(palabra, "]") == 0) {
             return ']';
