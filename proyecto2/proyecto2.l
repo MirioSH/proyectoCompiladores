@@ -178,7 +178,7 @@
 
 	// Funcion para obtener el valor en el catalogo de OPERADORES DE ASIGNACIÓN
 
-	int Operadores_rel(char* Op)
+	int Operadores_asig(char* Op)
         {
             // Asignamos el valor con un ciclo for
             for (int i = 6; i < 13; i++) {
