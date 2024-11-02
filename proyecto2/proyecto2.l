@@ -104,7 +104,7 @@
         TablaLiterales tablaLiteralesNumericas[99999]; // Se crea el arreglo "tablaLitNum"
         TokenInfo tokens[99999]; // Se crea el arreglo "tokens"
         PalRes catalogoRes[17]; // Se crea el catalogo de palabras reservadas
-        Operadores catalogoOp[7]; // Se crea el catalogo de operadores
+        Operadores catalogoOp[13]; // Se crea el catalogo de operadores
 
         // Se crean variables para las funciones de busqueda
         int numSimbolos, numLitCad, numLitNum, numTokens;
