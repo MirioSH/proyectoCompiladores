@@ -292,24 +292,24 @@
 
 
     char asignarAtomoSimEspe(const char* palabra){
-        if (strcmp(palabra, "[") == 0) {
-            return '[';
-        } else if (strcmp(palabra, "]") == 0) {
-            return ']';
-        } else if (strcmp(palabra, "(") == 0) {
+        if (strcmp(palabra, "(") == 0) {
             return '(';
         } else if (strcmp(palabra, ")") == 0) {
             return ')';
+        } else if (strcmp(palabra, "(") == 0) {
+            return '(';
         } else if (strcmp(palabra, "{") == 0) {
             return '{';
-        } else if (strcmp(palabra, "}") == 0) {
-            return '}';
-        }else if (strcmp(palabra, ",") == 0) {
+        } else if (strcmp(palabra, "[") == 0) {
+            return '[';
+        } else if (strcmp(palabra, "]") == 0) {
+            return ']';
+        }else if (strcmp(palabra, "&") == 0) {
+            return '&';
+        } else if (strcmp(palabra, ",") == 0) {
             return ',';
         } else if (strcmp(palabra, ":") == 0) {
             return ':';
-        } else if (strcmp(palabra, ";") == 0) {
-            return ';';
         } else {
             return 'N'; // Valor por defecto si no se encuentra la palabra
         }
