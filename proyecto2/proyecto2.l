@@ -377,7 +377,7 @@
     strcpy(tokens[numTokens].valor, cadena);
     strcpy(tokens[numTokens].info, yytext);
     tokens[numTokens].atomo = asignarAtomoPalRes(yytext); // ASIGNA EL ATOMO
-    trcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
     numTokens++;
 }
 
