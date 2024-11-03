@@ -20,6 +20,7 @@
         char asignarAtomoSimEspe(const char* yytext);
         char asignarAtomoOpArit(const char* yytext);
         char *asignarAtomoOpRel(const char* yytext);
+	char *asignarAtomoOpAsig(const char* yytext);
 
         void Program();
         void otraFunc();
