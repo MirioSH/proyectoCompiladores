@@ -399,7 +399,7 @@
 
 "~"|"+~""|"-~"|"*~"|"/~"|"$~" { 
 
-	printf("[Clase 2] Operador relacional: %s\n", yytext);
+	printf("[Clase 2] Operador de asignacion: %s\n", yytext);
 	int val = Operadores_asig(yytext);
 	char cadena[20];
 	// Almacena la información del token
