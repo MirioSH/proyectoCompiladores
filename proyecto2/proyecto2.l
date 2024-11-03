@@ -181,7 +181,7 @@
 	int Operadores_asig(char* Op)
         {
             // Asignamos el valor con un ciclo for
-            for (int i = 6; i < 13; i++) {
+            for (int i = 7; i < 13; i++) {
                 catalogoOp[i].valor=i;
             }
             
