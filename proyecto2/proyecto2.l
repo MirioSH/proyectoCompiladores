@@ -162,7 +162,6 @@
  	    strcpy(catalogoOp[3].op, "^^=");
 	    strcpy(catalogoOp[4].op, "^\"=");
  	    strcpy(catalogoOp[5].op, "<>");
-  	    strcpy(catalogoOp[6].op, "!=");
 
             // Con busqueda lineal revisamos si el op coincide con el operador
             for (int i = 0; i < 32; i++) {
@@ -336,11 +335,11 @@
 
     //Operadores relacionales según los valores de la tabla
     char asignarAtomoOpRel(const char* op) {
-        if (strcmp(op, ">") == 0) return '>';
-        if (strcmp(op, "<") == 0) return '<';
+        if (strcmp(op, "^^") == 0) return '>';
+        if (strcmp(op, "^\"") == 0) return '<';
         if (strcmp(op, "==") == 0) return '?';
-        if (strcmp(op, ">=") == 0) return 'y';
-        if (strcmp(op, "<=") == 0) return 'l';
+        if (strcmp(op, "^^=") == 0) return 'y';
+        if (strcmp(op, "^\"=") == 0) return 'l';
         if (strcmp(op, "<>") == 0) return '¿';
         return 'N'; // No encontrado
     }
