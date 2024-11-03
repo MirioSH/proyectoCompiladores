@@ -432,7 +432,7 @@
 
 "^^"|"^\""|"=="|"^^=""|"^\"="|"<>" { 
 
-	printf("[Clase 7] Operador relacional: %s\n", yytext);
+	printf("[Clase 4] Operador relacional: %s\n", yytext);
 	int val = Operadores_rel(yytext);
 	char cadena[20];
 	// Almacena la información del token
@@ -448,7 +448,7 @@
 // PARA CLASE 5, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
 
 [A-Za-z][A-Za-z0-9]{0,5}_ {
-    printf("[Clase 1] Identificador válido: %s\n", yytext);
+    printf("[Clase 5] Identificador válido: %s\n", yytext);
     int pos = buscaTabSimb(yytext);
     char cadena[20];
     if (pos == -1) {
@@ -471,7 +471,7 @@
 // PARA CLASE 6, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
 
 [+-]?\s?[0-9]{1,6} {
-    printf("[Clase 2] Constante numérica válida: %s\n", yytext);
+    printf("[Clase 6] Constante numérica válida: %s\n", yytext);
     int pos = buscaTabLitNum(yytext);
     char cadena[20];
     int val;
@@ -493,7 +493,7 @@
 // PARA CLASE 7, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
 
 ([0-9]+\.[0-9]+|\.[0-9]+|[0-9]+\.) {
-    printf("[Clase 3] Constante decimal válida: %s\n", yytext);
+    printf("[Clase 7] Constante decimal válida: %s\n", yytext);
     int pos = buscaTabLitNum(yytext);
     char cadena[20];
     int val;
@@ -515,7 +515,7 @@
 // PARA CLASE 8, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
 
 \"[^\"]{1,38}\" {
-    printf("[Clase 4] Cadena válida: %s\n", yytext);
+    printf("[Clase 8] Cadena válida: %s\n", yytext);
     int pos = buscaTabLitCads(yytext);
     char cadena[20];
     int val;
@@ -539,7 +539,7 @@
 
 
 \'[^\']\' {
-    printf("[Clase 5] Carácter válido: %s\n", yytext);
+    printf("[Clase 9] Carácter válido: %s\n", yytext);
     tokens[numTokens].clase = 9;
     strcpy(tokens[numTokens].valor, yytext);
     strcpy(tokens[numTokens].info, yytext);
