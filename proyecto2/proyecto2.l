@@ -119,26 +119,20 @@
                 }
             
             // Agregamos las palabras reservadas al catalogo
-            strcpy(catalogoRes[0].palabra, "case");
-            strcpy(catalogoRes[1].palabra, "long");
-            strcpy(catalogoRes[2].palabra, "if");
-            strcpy(catalogoRes[3].palabra, "else");
-            strcpy(catalogoRes[4].palabra, "double");
-            strcpy(catalogoRes[5].palabra, "while");
+            strcpy(catalogoRes[0].palabra, "cadena");
+            strcpy(catalogoRes[1].palabra, "caracter");
+            strcpy(catalogoRes[2].palabra, "else");
+            strcpy(catalogoRes[3].palabra, "entero");
+            strcpy(catalogoRes[4].palabra, "for");
+            strcpy(catalogoRes[5].palabra, "if");
             strcpy(catalogoRes[6].palabra, "do");
-            strcpy(catalogoRes[7].palabra, "int");
-            strcpy(catalogoRes[8].palabra, "default");
-            strcpy(catalogoRes[9].palabra, "float");
-            strcpy(catalogoRes[10].palabra, "for");
-            strcpy(catalogoRes[11].palabra, "switch");
-            strcpy(catalogoRes[12].palabra, "short");
-            strcpy(catalogoRes[13].palabra, "continue");
-            strcpy(catalogoRes[14].palabra, "break");
-            strcpy(catalogoRes[15].palabra, "char");
-            strcpy(catalogoRes[16].palabra, "return");
+            strcpy(catalogoRes[7].palabra, "real");
+            strcpy(catalogoRes[8].palabra, "return");
+            strcpy(catalogoRes[9].palabra, "void");
+            strcpy(catalogoRes[10].palabra, "while");
             
             // Con busqueda lineal revisamos si la palabra coincide con la palabra reservada
-            for (int i = 0; i < 17; i++) { //EN CASO DE QUE EXISTA LA PALABRA RESERVADA Y LA COMPARAMOS CON PAL, ENTONCES VAMOS A RETORNAR EL VALOR DEL CATALOGO DE ARRIBA.
+            for (int i = 0; i < 11; i++) { //EN CASO DE QUE EXISTA LA PALABRA RESERVADA Y LA COMPARAMOS CON PAL, ENTONCES VAMOS A RETORNAR EL VALOR DEL CATALOGO DE ARRIBA.
                 if (strcmp(pal, catalogoRes[i].palabra) == 0) {
                     // Si coincide regresamos el valor en la tabla de palabras reservadas
                     return catalogoRes[i].valor;
