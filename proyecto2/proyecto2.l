@@ -450,7 +450,7 @@
 [A-Za-z][A-Za-z0-9]{0,5}_ {
     printf("[Clase 1] Identificador válido: %s\n", yytext);
     int pos = buscaTabSimb(yytext);
-    char cadena[20];S
+    char cadena[20];
     if (pos == -1) {
         tablaSimbolos[numSimbolos].posicion = numSimbolos + 1;
         strcpy(tablaSimbolos[numSimbolos].nombre, yytext);
