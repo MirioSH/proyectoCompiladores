@@ -20,6 +20,7 @@
         char asignarAtomoSimEspe(const char* yytext);
         char asignarAtomoOpArit(const char* yytext);
         char *asignarAtomoOpRel(const char* yytext);
+	char *asignarAtomoOpAsig(const char* yytext);
 
         void Program();
         void otraFunc();
@@ -118,26 +119,20 @@
                 }
             
             // Agregamos las palabras reservadas al catalogo
-            strcpy(catalogoRes[0].palabra, "case");
-            strcpy(catalogoRes[1].palabra, "long");
-            strcpy(catalogoRes[2].palabra, "if");
-            strcpy(catalogoRes[3].palabra, "else");
-            strcpy(catalogoRes[4].palabra, "double");
-            strcpy(catalogoRes[5].palabra, "while");
+            strcpy(catalogoRes[0].palabra, "cadena");
+            strcpy(catalogoRes[1].palabra, "caracter");
+            strcpy(catalogoRes[2].palabra, "else");
+            strcpy(catalogoRes[3].palabra, "entero");
+            strcpy(catalogoRes[4].palabra, "for");
+            strcpy(catalogoRes[5].palabra, "if");
             strcpy(catalogoRes[6].palabra, "do");
-            strcpy(catalogoRes[7].palabra, "int");
-            strcpy(catalogoRes[8].palabra, "default");
-            strcpy(catalogoRes[9].palabra, "float");
-            strcpy(catalogoRes[10].palabra, "for");
-            strcpy(catalogoRes[11].palabra, "switch");
-            strcpy(catalogoRes[12].palabra, "short");
-            strcpy(catalogoRes[13].palabra, "continue");
-            strcpy(catalogoRes[14].palabra, "break");
-            strcpy(catalogoRes[15].palabra, "char");
-            strcpy(catalogoRes[16].palabra, "return");
+            strcpy(catalogoRes[7].palabra, "real");
+            strcpy(catalogoRes[8].palabra, "return");
+            strcpy(catalogoRes[9].palabra, "void");
+            strcpy(catalogoRes[10].palabra, "while");
             
             // Con busqueda lineal revisamos si la palabra coincide con la palabra reservada
-            for (int i = 0; i < 17; i++) { //EN CASO DE QUE EXISTA LA PALABRA RESERVADA Y LA COMPARAMOS CON PAL, ENTONCES VAMOS A RETORNAR EL VALOR DEL CATALOGO DE ARRIBA.
+            for (int i = 0; i < 11; i++) { //EN CASO DE QUE EXISTA LA PALABRA RESERVADA Y LA COMPARAMOS CON PAL, ENTONCES VAMOS A RETORNAR EL VALOR DEL CATALOGO DE ARRIBA.
                 if (strcmp(pal, catalogoRes[i].palabra) == 0) {
                     // Si coincide regresamos el valor en la tabla de palabras reservadas
                     return catalogoRes[i].valor;
@@ -162,7 +157,6 @@
  	    strcpy(catalogoOp[3].op, "^^=");
 	    strcpy(catalogoOp[4].op, "^\"=");
  	    strcpy(catalogoOp[5].op, "<>");
-  	    strcpy(catalogoOp[6].op, "!=");
 
             // Con busqueda lineal revisamos si el op coincide con el operador
             for (int i = 0; i < 32; i++) {
@@ -181,7 +175,7 @@
 	int Operadores_asig(char* Op)
         {
             // Asignamos el valor con un ciclo for
-            for (int i = 6; i < 13; i++) {
+            for (int i = 7; i < 13; i++) {
                 catalogoOp[i].valor=i;
             }
             
@@ -292,24 +286,26 @@
 
 
     char asignarAtomoSimEspe(const char* palabra){
-        if (strcmp(palabra, "[") == 0) {
-            return '[';
-        } else if (strcmp(palabra, "]") == 0) {
-            return ']';
-        } else if (strcmp(palabra, "(") == 0) {
+        if (strcmp(palabra, "(") == 0) {
             return '(';
         } else if (strcmp(palabra, ")") == 0) {
             return ')';
+        } else if (strcmp(palabra, "(") == 0) {
+            return '(';
         } else if (strcmp(palabra, "{") == 0) {
             return '{';
         } else if (strcmp(palabra, "}") == 0) {
             return '}';
-        }else if (strcmp(palabra, ",") == 0) {
+        }  else if (strcmp(palabra, "[") == 0) {
+            return '[';
+        } else if (strcmp(palabra, "]") == 0) {
+            return ']';
+        }else if (strcmp(palabra, "&") == 0) {
+            return '&';
+        } else if (strcmp(palabra, ",") == 0) {
             return ',';
         } else if (strcmp(palabra, ":") == 0) {
             return ':';
-        } else if (strcmp(palabra, ";") == 0) {
-            return ';';
         } else {
             return 'N'; // Valor por defecto si no se encuentra la palabra
         }
@@ -325,12 +321,8 @@
             return '*';
         } else if (strcmp(palabra, "/") == 0) {
             return '/';
-        } else if (strcmp(palabra, "%") == 0) { 
-            return '%';
-        } else if (strcmp(palabra, "\\") == 0) { // Verifica la barra invertida correctamente
-            return '\\';
-        } else if (strcmp(palabra, "^") == 0) {
-            return '^';
+        } else if (strcmp(palabra, "$") == 0) { 
+            return '$';
         } else {
             return 'N'; // Valor por defecto si no se encuentra la palabra
         }
@@ -338,11 +330,11 @@
 
     //Operadores relacionales según los valores de la tabla
     char asignarAtomoOpRel(const char* op) {
-        if (strcmp(op, ">") == 0) return '>';
-        if (strcmp(op, "<") == 0) return '<';
+        if (strcmp(op, "^^") == 0) return '>';
+        if (strcmp(op, "^\"") == 0) return '<';
         if (strcmp(op, "==") == 0) return '?';
-        if (strcmp(op, ">=") == 0) return 'y';
-        if (strcmp(op, "<=") == 0) return 'l';
+        if (strcmp(op, "^^=") == 0) return 'y';
+        if (strcmp(op, "^\"=") == 0) return 'l';
         if (strcmp(op, "<>") == 0) return '¿';
         return 'N'; // No encontrado
     }
@@ -367,11 +359,13 @@
 
 %%
 
-"case"|"long"|"if"|"else"|"double"|"while"|"do"|"int"|"default"|"float"|"for"|"switch"|"short"|"continue"|"break"|"char"|"return"   {
+// PARA PALABRAS RESERVADAS CLASE 0, LOS ATOMOS DE ESTA PARTE SE ENCUENTRA EN 
+
+
+"cadena"|"caracter"|"else"|"entero"|"for"|"if"|"real"|"return"|"void"|"while" {
     printf("[Clase 0] Palabra reservada: %s\n", yytext);
     int val = Palabras_res(yytext);
     char cadena[20];
-    // Almacena la información del token
     tokens[numTokens].clase = 0;
     sprintf(cadena, "%d", val);
     strcpy(tokens[numTokens].valor, cadena);
@@ -379,186 +373,182 @@
     tokens[numTokens].atomo = asignarAtomoPalRes(yytext); // ASIGNA EL ATOMO
     strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
     numTokens++;
- }
-
-$[a-zA-Z]+           { printf("[Clase 1] Identificador: %s\n", yytext);
-                    int pos = buscaTabSimb(yytext);
-                    char cadena[20];
-                    int val;
-                    if (pos == -1) {
-                        tablaSimbolos[numSimbolos].posicion = numSimbolos + 1;
-                        strcpy(tablaSimbolos[numSimbolos].nombre, yytext);
-                        tablaSimbolos[numSimbolos].tipo = -1;
-                        numSimbolos++;
-                    }
-                    // Almacena la información del token
-                    tokens[numTokens].clase = 1;
-                    val = posTabSimb(yytext);
-                    sprintf(cadena, "%d", val);
-                    strcpy(tokens[numTokens].valor, cadena);
-                    strcpy(tokens[numTokens].info, yytext);
-                    tokens[numTokens].atomo = 'i'; // ASIGNANDO EL ATOMO
-                    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                    numTokens++; }
-                       
-                    
-
-0[0-7]+             { printf("[Clase 2] Constante numerica (base 8): %s\n", yytext);
-                    int pos = buscaTabLitNum(yytext);
-                    char cadena[20];
-                    int val;
-                    if (pos == -1) {
-                        tablaLiteralesNumericas[numLitNum].posicion = numLitNum + 1;
-                        strcpy(tablaLiteralesNumericas[numLitNum].dato, yytext);
-                        numLitNum++;
-                    }
-                    // Almacena la información del token
-                    tokens[numTokens].clase = 2;
-                    val = posTabLitNum(yytext);
-                    sprintf(cadena, "%d", val);
-                    strcpy(tokens[numTokens].valor, cadena);
-                    strcpy(tokens[numTokens].info, yytext);
-                    tokens[numTokens].atomo = 'n'; // ASIGNANDO EL ATOMO
-                    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                    numTokens++; }
-                        
-                    
-
-[1-9][0-9]*         { printf("[Clase 2] Constante numerica (base 10): %s\n", yytext);
-                    int pos = buscaTabLitNum(yytext);
-                    char cadena[20];
-                    int val;
-                    if (pos == -1) {
-                        tablaLiteralesNumericas[numLitNum].posicion = numLitNum + 1;
-                        strcpy(tablaLiteralesNumericas[numLitNum].dato, yytext);
-                        numLitNum++;
-                    }
-                    // Almacena la información del token
-                    tokens[numTokens].clase = 2;
-                    val = posTabLitNum(yytext);
-                    sprintf(cadena, "%d", val);
-                    strcpy(tokens[numTokens].valor, cadena);
-                    strcpy(tokens[numTokens].info, yytext);
-                    tokens[numTokens].atomo = 'n'; // ASIGNANDO EL ATOMO
-                    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                    numTokens++; }
-                        
-                    
-0                   { printf("[Clase 2] Constante numerica entera (base 10): %s\n", yytext);
-                    int pos = buscaTabLitNum(yytext);
-                    char cadena[20];
-                    int val;
-                    if (pos == -1) {
-                        tablaLiteralesNumericas[numLitNum].posicion = numLitNum + 1;
-                        strcpy(tablaLiteralesNumericas[numLitNum].dato, yytext);
-                        numLitNum++;
-                    }
-                    // Almacena la información del token
-                    tokens[numTokens].clase = 2;
-                    val = posTabLitNum(yytext);
-                    sprintf(cadena, "%d", val);
-                    strcpy(tokens[numTokens].valor, cadena);
-                    strcpy(tokens[numTokens].info, yytext);
-                    tokens[numTokens].atomo = 'n'; // ASIGNANDO EL ATOMO
-                    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                    numTokens++; }
-                        
-                    
-([0-9]+)?\.[0-9]+   { printf("[Clase 3] Constante numerica real: %s\n", yytext);
-                    int pos = buscaTabLitNum(yytext);
-                    char cadena[20];
-                    int val;
-                    if (pos == -1) {
-                        tablaLiteralesNumericas[numLitNum].posicion = numLitNum + 1;
-                        strcpy(tablaLiteralesNumericas[numLitNum].dato, yytext);
-                        numLitNum++;
-                    }
-                    // Almacena la información del token
-                    tokens[numTokens].clase = 3;
-                    val = posTabLitNum(yytext);
-                    sprintf(cadena, "%d", val);
-                    strcpy(tokens[numTokens].valor, cadena);
-                    strcpy(tokens[numTokens].info, yytext);
-                    tokens[numTokens].atomo = 'r'; // ASIGNANDO EL ATOMO
-                    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                    numTokens++; }
-                        
-                    
-\"[^\"\']*\"|\'[^\"\']*\' { printf("[Clase 4] Constante cadena: %s\n", yytext);
-                            int pos = buscaTabLitCads(yytext);
-                            char cadena[20];
-                            int val;
-                            if (pos == -1) {
-                                tablaLiteralesCadenas[numLitCad].posicion = numLitCad + 1;
-                                strcpy(tablaLiteralesCadenas[numLitCad].dato, yytext);
-                                numLitCad++;
-                            }
-                            // Almacena la información del token
-                            tokens[numTokens].clase = 4;
-                            val = posTabLitCads(yytext);
-                            sprintf(cadena, "%d", val);
-                            strcpy(tokens[numTokens].valor, cadena);
-                            strcpy(tokens[numTokens].info, yytext);
-                            tokens[numTokens].atomo = 's'; // ASIGNANDO EL ATOMO 
-                            strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos                  
-                            numTokens++; }
-                        
-
-"["|"]"|"("|")"|"{"|"}"|","|":"|";" { printf("[Clase 5] Simbolo especial: %s\n", yytext);
-                                    // Almacena la información del token
-                                    tokens[numTokens].clase = 5;
-                                    strcpy(tokens[numTokens].valor, yytext);
-                                    strcpy(tokens[numTokens].info, yytext);
-                                    tokens[numTokens].atomo = asignarAtomoSimEspe(yytext); // ASIGNA EL ATOMO
-                                    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                                    numTokens++; }
-                       
-                    
-
-"+"|"-"|"*"|"/"|"%"|"\\"|"^" { printf("[Clase 6] Operador aritmetico: %s\n", yytext);
-                            // Almacena la información del token
-                            tokens[numTokens].clase = 6;
-                            strcpy(tokens[numTokens].valor, yytext);
-                            strcpy(tokens[numTokens].info, yytext);
-                            tokens[numTokens].atomo = asignarAtomoOpArit(yytext); // ASIGNA EL ATOMO
-                            strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                            numTokens++; }
-    
-
-"<"|">"|"<="|">="|"=="|"!=" { printf("[Clase 7] Operador relacional: %s\n", yytext);
-                              int val = Operadores_rel(yytext);
-                              char cadena[20];
-                              // Almacena la información del token
-                              tokens[numTokens].clase = 7;
-                              sprintf(cadena, "%d", val);
-                              strcpy(tokens[numTokens].valor, cadena);
-                              strcpy(tokens[numTokens].info, yytext);
-                              tokens[numTokens].atomo = *asignarAtomoOpRel(yytext); // ASIGNA EL ATOMO
-                              strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                              numTokens++;
-                            }
-
-//COLORCAR AQUI LA CLASE PARA OPERADORES DE ASIGNACION
+}
 
 
+// PARA CLASE 1, REFERENTE A LOS OPERADORES ARITMETICOS 
 
 
+"+"|"-"|"*"|"/"|"$" {
+    printf("[Clase 1] Operador aritmético: %s\n", yytext);
+    tokens[numTokens].clase = 1;
+    strcpy(tokens[numTokens].valor, yytext);
+    strcpy(tokens[numTokens].info, yytext);
+    tokens[numTokens].atomo = asignarAtomoOpArit(yytext); // ASIGNA EL ATOMO
+    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+    numTokens++;
+}
 
-"="                 { printf("[Clase 8] Operador de asignacion: %s\n", yytext);
-                    // Almacena la información del token
-                    tokens[numTokens].clase = 8;
-                    strcpy(tokens[numTokens].valor, yytext);
-                    strcpy(tokens[numTokens].info, yytext);
-                    tokens[numTokens].atomo = '='; // ASIGNANDO EL ATOMO
-                    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
-                    numTokens++; }
-                        
+// PARA CLASE 2, REFERENTE A LA TABLA DE OPERADORES DE ASIGNACION
+
+"~"|"+~""|"-~"|"*~"|"/~"|"$~" { 
+
+	printf("[Clase 2] Operador de asignacion: %s\n", yytext);
+	int val = Operadores_asig(yytext);
+	char cadena[20];
+	// Almacena la información del token
+	tokens[numTokens].clase = 2;
+	sprintf(cadena, "%d", val);
+	strcpy(tokens[numTokens].valor, cadena);
+	strcpy(tokens[numTokens].info, yytext);
+	tokens[numTokens].atomo = *asignarAtomoOpAsig(yytext); // ASIGNA EL ATOMO
+	strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+        numTokens++;
+}
+
+
+// PARA CLASE 3, REFERENTE A LOS SIMBOLOS ESPECIALES
+
+
+")"|"("|"{"|"}"|"["|"]"|"&"|","|":" { 
+
+	printf("[Clase 3] Simbolo especial: %s\n", yytext);      
+	// Almacena la información del token
+        tokens[numTokens].clase = 3;
+        strcpy(tokens[numTokens].valor, yytext);
+        strcpy(tokens[numTokens].info, yytext);
+        tokens[numTokens].atomo = asignarAtomoSimEspe(yytext); // ASIGNA EL ATOMO
+        strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+        numTokens++; 
+}
+
+// PARA CLASE 4, REFERENTE A LA TABLA DE OPERADORES RELACIONALES
+
+"^^"|"^\""|"=="|"^^=""|"^\"="|"<>" { 
+
+	printf("[Clase 4] Operador relacional: %s\n", yytext);
+	int val = Operadores_rel(yytext);
+	char cadena[20];
+	// Almacena la información del token
+	tokens[numTokens].clase = 4;
+	sprintf(cadena, "%d", val);
+	strcpy(tokens[numTokens].valor, cadena);
+	strcpy(tokens[numTokens].info, yytext);
+	tokens[numTokens].atomo = *asignarAtomoOpRel(yytext); // ASIGNA EL ATOMO
+	strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+        numTokens++;
+}
+
+// PARA CLASE 5, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
+
+[A-Za-z][A-Za-z0-9]{0,5}_ {
+    printf("[Clase 5] Identificador válido: %s\n", yytext);
+    int pos = buscaTabSimb(yytext);
+    char cadena[20];
+    if (pos == -1) {
+        tablaSimbolos[numSimbolos].posicion = numSimbolos + 1;
+        strcpy(tablaSimbolos[numSimbolos].nombre, yytext);
+        tablaSimbolos[numSimbolos].tipo = -1;
+        pos = numSimbolos; // Se asigna la nueva posición
+        numSimbolos++;
+    }
+    tokens[numTokens].clase = 5;
+    sprintf(cadena, "%d", tablaSimbolos[pos].posicion);
+    strcpy(tokens[numTokens].valor, cadena);
+    strcpy(tokens[numTokens].info, yytext);
+    tokens[numTokens].atomo = 'a'; // ASIGNANDO EL ATOMO
+     strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+    numTokens++;
+}
+
+
+// PARA CLASE 6, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
+
+[+-]?\s?[0-9]{1,6} {
+    printf("[Clase 6] Constante numérica válida: %s\n", yytext);
+    int pos = buscaTabLitNum(yytext);
+    char cadena[20];
+    int val;
+    if (pos == -1) {
+        tablaLiteralesNumericas[numLitNum].posicion = numLitNum + 1;
+        strcpy(tablaLiteralesNumericas[numLitNum].dato, yytext);
+        numLitNum++;
+    }
+    tokens[numTokens].clase = 6;
+    val = posTabLitNum(yytext);
+    sprintf(cadena, "%d", val);
+    strcpy(tokens[numTokens].valor, cadena);
+    strcpy(tokens[numTokens].info, yytext);
+    tokens[numTokens].atomo = 'z'; // ASIGNANDO EL ATOMO
+    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+    numTokens++;
+}
+
+// PARA CLASE 7, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
+
+([0-9]+\.[0-9]+|\.[0-9]+|[0-9]+\.) {
+    printf("[Clase 7] Constante decimal válida: %s\n", yytext);
+    int pos = buscaTabLitNum(yytext);
+    char cadena[20];
+    int val;
+    if (pos == -1) {
+        tablaLiteralesNumericas[numLitNum].posicion = numLitNum + 1;
+        strcpy(tablaLiteralesNumericas[numLitNum].dato, yytext);
+        numLitNum++;
+    }
+    tokens[numTokens].clase = 7;
+    val = posTabLitNum(yytext);
+    sprintf(cadena, "%d", val);
+    strcpy(tokens[numTokens].valor, cadena);
+    strcpy(tokens[numTokens].info, yytext);
+    tokens[numTokens].atomo = 'r'; // ASIGNANDO EL ATOMO
+    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos
+    numTokens++;
+}
+
+// PARA CLASE 8, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
+
+\"[^\"]{1,38}\" {
+    printf("[Clase 8] Cadena válida: %s\n", yytext);
+    int pos = buscaTabLitCads(yytext);
+    char cadena[20];
+    int val;
+    if (pos == -1) {
+        tablaLiteralesCadenas[numLitCad].posicion = numLitCad + 1;
+        strcpy(tablaLiteralesCadenas[numLitCad].dato, yytext);
+        numLitCad++;
+    }
+    tokens[numTokens].clase = 8;
+    val = posTabLitCads(yytext);
+    sprintf(cadena, "%d", val);
+    strcpy(tokens[numTokens].valor, cadena);
+    strcpy(tokens[numTokens].info, yytext);
+    tokens[numTokens].atomo = 's'; // ASIGNANDO EL ATOMO 
+    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos       
+    numTokens++;
+}
+
+
+// PARA CLASE 9, LEER LAS ESPECIFICACIONES EN LA TABLA DEL PDF
+
+
+\'[^\']\' {
+    printf("[Clase 9] Carácter válido: %s\n", yytext);
+    tokens[numTokens].clase = 9;
+    strcpy(tokens[numTokens].valor, yytext);
+    strcpy(tokens[numTokens].info, yytext);
+    tokens[numTokens].atomo = 'c'; // ASIGNANDO EL ATOMO 
+    strcat(cadenaAtomos, &tokens[numTokens].atomo); // Agrega el atomo a la cadena de atomos  
+    numTokens++;
+}
 
 [ \t\n]+            ;  // Ignora espacios, tabuladores y saltos de línea
 
 .                   {
                         fprintf(stderr, "No se reconoce el caracter (%s)\n", yytext); // No reconoce el caracter
                     }
+
+
 
 %%
 
